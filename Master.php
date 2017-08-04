@@ -15,11 +15,21 @@ class Master_Dispatch
     private $get = array();
     private $page404 = false;
 
-    public function __construct($Url)
+    public function __construct($url)
     {
 
         $dispatch = explode('/', $url);
+        array_shift($dispatch);
         $NbArguments = count($dispatch);
+        Aff($dispatch);
+
+        $this->module = 'Front';
+        if (isset($dispatch[0]) and $dispatch[0] == 'Admin') {
+            $this->module = 'Admin';
+        }
+
+        echo $this->module;
+
         if ($taille < 3) {
             $this->page404 = true;
         }
