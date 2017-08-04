@@ -10,6 +10,7 @@
 class Master_Dispatch
 {
     private $module;
+    private $defaultModule = false;
     private $page;
     private $action;
     private $get = array();
@@ -23,21 +24,25 @@ class Master_Dispatch
         $NbArguments = count($dispatch);
         Aff($dispatch);
 
-        $this->module = 'Front';
-        if (isset($dispatch[0]) and $dispatch[0] == 'Admin') {
-            $this->module = 'Admin';
-        }
+        switch ($dispatch[0]) {
 
-        echo $this->module;
+            case null:
+                $this->defaultModule = true;
+            case 'front':
+            case 'Front':
+                $this->module = 'Front';
+                break;
+            case 'Admin':
+                $this->module = 'Admin';
+        };
 
-        if ($taille < 3) {
-            $this->page404 = true;
-        }
-        $this->module = $chemin[1];
-        $this->page = $chemin[2];
-        if ($taille > 3) {
-            $this->action = $chemin[3];
-        }
+
+//        $this->module = 'Front';
+//        if (isset($dispatch[0]) and $dispatch[0] == 'Admin') {
+//            $this->module = 'Admin';
+//        }
+
+
         if ($taille > 4) {
             for ($i = 4; $i < $taille; $i++) {
                 $arg = explode('_', $chemin[$i]);
