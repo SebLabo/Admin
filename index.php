@@ -6,5 +6,6 @@
  * Time: 17:31
  */
 include "Library/My/divers.php";
-$url = $_SERVER['REQUEST_URI'];
-Aff($url);
+include "Master.php";
+
+$master = new Master_Dispatch($_SERVER['REQUEST_URI']);
