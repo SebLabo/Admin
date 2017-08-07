@@ -24,18 +24,25 @@ class Master_Dispatch
         $NbArguments = count($dispatch);
         Aff($dispatch);
 
-        switch ($dispatch[0]) {
 
+        switch ($dispatch[0]) {
+            case 'Admin':
+                $this->module = 'Admin';
+                break;
             case null:
                 $this->defaultModule = true;
+            default:
+                array_unshift($dispatch, 'front');
             case 'front':
             case 'Front':
                 $this->module = 'Front';
                 break;
-            case 'Admin':
-                $this->module = 'Admin';
+
         };
 
+        if ($this->defaultModule) {
+
+        }
 
 //        $this->module = 'Front';
 //        if (isset($dispatch[0]) and $dispatch[0] == 'Admin') {
