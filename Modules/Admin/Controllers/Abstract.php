@@ -52,9 +52,6 @@ Abstract class Admin_Abstract extends Core_Abstract
         $this->message = $message;
     }
 
-    public function Initialise()
-    {
 
-    }
 }
 

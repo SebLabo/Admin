@@ -10,52 +10,57 @@
 class Master_Dispatch
 {
     private $module;
-    private $defaultModule = false;
     private $page;
     private $action;
     private $get = array();
-    private $page404 = false;
+    private $controller;
 
     public function __construct($url)
     {
-
         $dispatch = explode('/', $url);
         array_shift($dispatch);
-        $NbArguments = count($dispatch);
-        Aff($dispatch);
-
 
         switch ($dispatch[0]) {
             case 'Admin':
                 $this->module = 'Admin';
                 break;
-            case null:
-                $this->defaultModule = true;
             default:
                 array_unshift($dispatch, 'front');
             case 'front':
             case 'Front':
                 $this->module = 'Front';
                 break;
-
         };
 
-        if ($this->defaultModule) {
 
+        if (isset($dispatch[1]) && $dispatch[1] != null) {
+            $this->page = $dispatch[1];
+        } else {
+            $this->page = 'index.php';
+        }
+        if (isset($dispatch[2]) && $dispatch[2] != null) {
+            $this->action = $dispatch[2];
         }
 
-//        $this->module = 'Front';
-//        if (isset($dispatch[0]) and $dispatch[0] == 'Admin') {
-//            $this->module = 'Admin';
-//        }
-
-
-        if ($taille > 4) {
-            for ($i = 4; $i < $taille; $i++) {
-                $arg = explode('_', $chemin[$i]);
-                $this->get[$arg[0]] = $arg[1];
+        foreach ($dispatch as $key => $data) {
+            if ($key > 2) {
+                $argument = explode('_', $data);
+                $this->get[$argument[0]] = $argument[1];
             }
         }
+
+        if (file_exists('Modules/' . $this->module . "/Controllers/" . $this->page . ".php")) {
+            $controller = $this->module . "_" . $this->page;
+            include 'Modules/' . $this->module . "/Controllers/" . $this->page . ".php";
+            $this->controller = new $controller;
+            $this->controller->Initialise();
+            if ($this->action != null) {
+//                $this->controller->
+            }
+        } else {
+            echo 'Modules/' . $this->module . "/Controllers/" . $this->page . ".php";
+        }
+
 
         Aff($this);
 
