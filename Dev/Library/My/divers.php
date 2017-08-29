@@ -52,7 +52,7 @@ function getURLinfos()
     return $infos;
 }
 
-function Aff($tab, $sortie = false)
+function aff($tab, $sortie = false)
 {
     echo "<pre>";
     print_r($tab);
