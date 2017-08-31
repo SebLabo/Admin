@@ -8,6 +8,8 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var jscs = require('gulp-jscs');
+var browserSync = require('browser-sync');
+
 
 // Lint Task
 gulp.task('lint', function () {
@@ -18,9 +20,12 @@ gulp.task('lint', function () {
 
 // Compile Our Sass
 gulp.task('sass', function () {
-    return gulp.src('scss/*.scss')
+    return gulp.src('Dev/Sources/Scss/**/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest('comp/css'));
+        .pipe(gulp.dest('Prod/CSS'))
+        .pipe(browserSync.reload({
+            stream: true
+        }));
 });
 
 // Concatenate & Minify JS
@@ -34,10 +39,21 @@ gulp.task('scripts', function () {
 });
 
 // Watch Files For Changes
-gulp.task('watch', function () {
+gulp.task('watch', ['browserSync', 'sass'], function () {
     gulp.watch('JS/*.js', ['lint', 'scripts']);
-    gulp.watch('scss/*.scss', ['sass']);
+    gulp.watch('Dev/Sources/Scss/**/*.scss', ['sass']);
+    gulp.watch('Dev/*.html', browserSync.reload);
+    gulp.watch('Dev/Sources/JS/**/*.js', browserSync.reload);
 });
+
+// refresh navigateur
+gulp.task('browserSync', function () {
+    browserSync({
+        server: {
+            baseDir: 'Dev'
+        },
+    })
+})
 
 // Default Task
 gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
